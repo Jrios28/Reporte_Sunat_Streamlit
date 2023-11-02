@@ -1,0 +1,145 @@
+Id_super_padre,Super_Padre_Name,Id_P,Nombre_P,Tipo_P,Id_H,Nombre_H,Tipo_H,Id_N,Nombre_N,Tipo_N,Address,Size,DATE
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1559,Servidores,lan,150.50.0.0/16,65536,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1562,Interna BD producción,lan,172.16.0.0/22,1024,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1690,MENTA - SDDC-DPortGroup-Mgmt,lan,172.16.16.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1696,MENTA - SDDC-DPortGroup-vMotion,lan,172.16.17.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1699,MENTA - SDDC-DPortGroup-VTEP_VXLAN,lan,172.16.18.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1711,MENTA - Dynatrace_Cluster,lan,172.16.19.0/25,128,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1714,MENTA - Dynatrace_Colectores,lan,172.16.19.128/25,128,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1693,MENTA - SDDC-DPortGroup-VSAN,lan,172.16.20.128/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1708,MENTA - Edge_to_DLR,lan,172.16.20.144/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1702,MENTA - Uplink01,lan,172.16.20.160/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1705,MENTA - Uplink02,lan,172.16.20.176/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1687,MENTA - BGP-Edge,lan,172.16.20.224/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1565,Interna no BD producción,lan,172.17.0.0/22,1024,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1608,Interna Desarrollo,lan,172.18.1.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1605,Interna Calidad,lan,172.18.3.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1568,Gestion,lan,172.19.0.0/21,2048,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1574,Respaldo Servidores Fisicos,lan,172.19.16.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1577,Respaldo Servidores Virtuales_LAN,lan,172.19.18.0/25,128,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1571,Gestion_excepcion,lan,172.19.19.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1642,GESTION POWER 9,lan,172.19.22.0/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1602,DMZ2 Desarrollo,lan,172.26.0.0/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1717,TANZU K8s PaaS -  DMZ Calidad,lan,172.26.56.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1720,TANZU k8s PaaS - DMZ Produccion,lan,172.26.57.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1723,TANZU k8s PaaS - DMZ Desarrollo,lan,172.26.58.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1726,TANZU K8s PaaS - Managment,lan,172.26.59.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1593,DMZ2 Calidad,lan,172.27.0.0/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1581,Callcenter,lan,172.30.0.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1617,Extranet_Terceros (SUNAT),lan,191.169.40.128/25,128,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1651,VLAN0192 (RAC),lan,192.168.0.0/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1654,VLAN0193 (RAC),lan,192.168.0.8/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1657,VLAN0194 (RAC),lan,192.168.0.16/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1660,VLAN0197 (RAC),lan,192.168.0.32/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1529,DMZ Sello de tiempo,lan,192.168.20.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1547,DMZ1,lan,192.168.30.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1624,Balanceo interno,lan,192.168.31.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1587,DMZ1 Calidad,lan,192.168.34.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1532,Element Management,lan,192.168.37.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1535,Management,lan,192.168.38.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1538,vMotion,lan,192.168.39.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1550,DMZ2 actual,lan,192.168.40.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1553,DMZ Funcionarios,lan,192.168.41.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1541,Ruteo DMZ a NUBE,lan,192.168.43.8/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1544,Telefonia IP DMZ,lan,192.168.43.16/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1590,DMZ2 Calidad,lan,192.168.44.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1596,DMZ1 Desarrollo,lan,192.168.46.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1611,desa_adu,lan,192.168.55.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1599,DMZ2 Desarrollo,lan,192.168.56.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1614,Extranet_Terceros (terceros),lan,192.168.60.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1556,DMZ2 nueva,lan,192.168.64.0/22,1024,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1584,Hosting,lan,192.168.68.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1648,ManagePURE,lan,192.168.69.0/25,128,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1621,Cabinas,lan,192.168.70.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1627,Exchange NLB,lan,192.168.71.0/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1630,Exchange DAG1,lan,192.168.71.16/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1633,Exchange DAG2,lan,192.168.71.32/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1636,VMWARE,lan,192.168.71.64/27,32,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1639,BBDD Power8,lan,192.168.71.96/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1645,ORACLE_TEST,lan,192.168.71.112/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1663,DMZ OSE,lan,192.168.195.0/25,128,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1672,DMZ1_Capital,lan,192.168.245.0/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1675,DMZ1_intra_Capital,lan,192.168.245.8/29,8,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1678,DMZ2_Capital,lan,192.168.245.16/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1681,DMZBD_Capital,lan,192.168.245.32/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1684,DMZBD_Capital_DC,lan,192.168.245.128/28,16,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1666,Gestion remota - Terceros,lan,192.168.250.0/24,256,2023/11/02
+506,SUNAT,1004,Sunat DC_01,supernet,1528,Sunat DC_01-Redes,supernet,1669,Fabrica Cosapi DMZ - Tercero,lan,192.168.251.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2267,Servidores,lan,150.100.0.0/16,65536,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2270,Interna BD producción,lan,172.16.4.0/22,1024,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2408,MENTA - SDDC-DPortGroup-Mgmt,lan,172.16.16.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2414,MENTA - SDDC-DPortGroup-vMotion,lan,172.16.21.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2417,MENTA - SDDC-DPortGroup-VTEP_VXLAN,lan,172.16.22.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2426,MENTA - Dynatrace_Colectores,lan,172.16.23.0/25,128,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2405,MENTA - BGP-Edge,lan,172.16.23.128/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2420,MENTA - Uplink01,lan,172.16.23.160/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2423,MENTA - Uplink02,lan,172.16.23.192/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2411,MENTA - SDDC-DPortGroup-VSAN,lan,172.16.23.224/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2330,DMZ2 Insumos Quimicos,lan,172.16.247.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2273,Interna no BD producción,lan,172.17.4.0/22,1024,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2318,Interna Calidad,lan,172.18.2.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2321,Interna Desarrollo,lan,172.18.4.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2276,Gestion,lan,172.19.8.0/21,2048,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2282,Respaldo Servidores Fisicos,lan,172.19.17.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2285,Respaldo Servidores Virtuales_LAN,lan,172.19.18.128/26,64,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2288,Respaldo Servidores Virtuales_DMZ,lan,172.19.18.192/26,64,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2279,Gestion_excepcion,lan,172.19.21.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2351,GESTION POWER 9,lan,172.19.22.16/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2315,DMZ2 1 Desarrollo,lan,172.26.8.0/21,2048,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2306,DMZ2 3 Calidad,lan,172.27.8.0/21,2048,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2291,Callcenter,lan,172.30.2.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2360,VLAN0192 (RAC),lan,192.168.2.0/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2363,VLAN0193 (RAC),lan,192.168.2.8/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2366,VLAN0194 (RAC),lan,192.168.2.16/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2369,VLAN0197 (RAC),lan,192.168.2.32/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2234,DMZ Sello de tiempo,lan,192.168.20.128/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2237,Sistema de CCTV - CenturyLink,lan,192.168.20.192/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2255,DMZ1,lan,192.168.32.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2333,Balanceo interno,lan,192.168.33.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2300,DMZ2 1 Calidad,lan,192.168.35.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2297,DMZ1 Calidad,lan,192.168.36.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2258,DMZ2 actual,lan,192.168.42.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2249,Ruteo DMZ a NUBE,lan,192.168.43.128/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2252,Telefonia IP DMZ,lan,192.168.43.144/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2261,DMZ Funcionarios,lan,192.168.47.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2243,Management,lan,192.168.48.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2246,vMotion,lan,192.168.49.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2240,Element Management,lan,192.168.51.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2309,DMZ1 Desarrollo,lan,192.168.57.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2312,DMZ2 Desarrollo,lan,192.168.58.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2324,Extranet_Terceros (SUNAT),lan,192.168.61.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2303,DMZ2 2 Calidad,lan,192.168.66.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2357,ManagePURE,lan,192.168.69.128/25,128,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2336,Exchange NLB,lan,192.168.71.128/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2339,Exchange DAG1,lan,192.168.71.144/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2342,Exchange DAG2,lan,192.168.71.160/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2345,VMWARE,lan,192.168.71.192/27,32,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2348,BBDD Power8,lan,192.168.71.224/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2354,ORACLE_TEST,lan,192.168.71.240/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2294,Hosting,lan,192.168.78.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2264,DMZ2 nueva,lan,192.168.84.0/22,1024,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2372,DMZ OSE,lan,192.168.195.128/25,128,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2327,DMZ_Extranet,lan,192.168.198.0/23,512,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2384,DMZ1_Capital,lan,192.168.245.48/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2387,DMZ1_intra_Capital,lan,192.168.245.56/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2390,DMZ2_Capital,lan,192.168.245.64/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2393,DMZBD_Capital,lan,192.168.245.80/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2396,DMZ1_Capital_DC,lan,192.168.245.96/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2399,DMZ1_intra_Capital_DC,lan,192.168.245.104/29,8,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2402,DMZ2_Capital_DC,lan,192.168.245.112/28,16,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2378,Fabrica Cosapi DMZ - Tercero,lan,192.168.247.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2375,Gestion remota - Terceros,lan,192.168.252.0/24,256,2023/11/02
+506,SUNAT,1073,Sunat_DC_02,supernet,1730,Sunat DC_02-Redes,supernet,2381,Fabrica Cosapi BD - Tercero,lan,192.168.253.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,2945,Chucuito Redes Usuarios,lan,10.4.0.0/18,16384,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,2951,Chucuito Telefonía IP - Centrales,lan,10.4.75.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,2948,Chucuito Telefonía IP,lan,10.4.84.0/22,1024,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,3177,Chucuito Videoconferencia,lan,10.4.88.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,2936,Videoconferencia,lan,10.4.88.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,2939,Chucuito Camaras IP,lan,10.4.89.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,2942,Chucuito Visualización Camaras,lan,10.4.90.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,3163,Vlan220,lan,10.10.220.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,3174,Chucuito Radioenlaces,lan,10.209.4.0/27,32,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,2932,Sunat Chucuito,supernet,2933,Radioenlaces,lan,10.209.4.0/27,32,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,3152,Edata_SI,supernet,3153,vlan128,lan,10.10.128.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,3152,Edata_SI,supernet,3156,Vlan_129,lan,10.10.129.0/24,256,2023/11/02
+506,SUNAT,1527,Sunat Campus,supernet,3152,Edata_SI,supernet,3168,VLAN_141,lan,10.10.141.0/24,256,2023/11/02
