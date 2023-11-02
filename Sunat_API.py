@@ -53,8 +53,8 @@ async def main():
 
     # ===================================Tabla Consolidada ================================
 
-    dfConsolidado = obtener_datos_de_segmento_red()
-    #dfConsolidado = pd.read_csv('Consolidado_Segmentos_Red_SUNAT.csv', sep=',')
+    #dfConsolidado = obtener_datos_de_segmento_red()
+    dfConsolidado = pd.read_csv('Consolidado_Segmentos_Red_SUNAT.csv', sep=',')
     #st.dataframe(dfConsolidado)
     dfConsolidado['Size'] = dfConsolidado['Size'].astype(int)
     #dfConsolidado.info()
