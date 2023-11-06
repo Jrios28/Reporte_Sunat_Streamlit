@@ -144,14 +144,26 @@ def obtener_datos_de_segmento_red():
 
 
 def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
-    df_origen["key"] = df_origen["Id_super_padre"].astype(str) + df_origen["Id_P"].astype(str) + df_origen["Id_H"].astype(str) + df_origen["Id_N"].astype(str)
-    df_nuevo["key"] = df_nuevo["Id_super_padre"].astype(str) + df_nuevo["Id_P"].astype(str) + df_nuevo["Id_H"].astype(str) + df_nuevo["Id_N"].astype(str)
+    df_origen["key"] = (
+        df_origen["Id_super_padre"].astype(str) + \
+        df_origen["Id_P"].astype(str) + \
+        df_origen["Id_H"].astype(str) + \
+        df_origen["Id_N"].astype(str)
+    )
+    df_nuevo["key"] = (
+        df_nuevo["Id_super_padre"].astype(str) + \
+        df_nuevo["Id_P"].astype(str) + \
+        df_nuevo["Id_H"].astype(str) + \
+        df_nuevo["Id_N"].astype(str)
+    )
 
     ### Insert
     df_to_insert = df_nuevo.loc[~df_nuevo.key.isin(df_origen.key.tolist())]
 
     ### Update
     df_to_update = df_nuevo.loc[df_nuevo.key.isin(df_origen.key.tolist())]
+    df_to_update.drop("DATE", axis=1, inplace=True, errors="ignore")
+    df_to_update = pd.merge(df_to_update, df_origen[["key","DATE"]],how='left',on="key")
 
     ### Delete
     df_to_delete = df_origen.loc[~df_origen.key.isin(df_nuevo.key.tolist())]
@@ -159,18 +171,23 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
     to_zone = tz.gettz()
     today_zone = datetime.now(to_zone).strftime("%Y-%m-%d %H:%M:%S")
     df_to_delete["fecha_eliminacion"] = today_zone
-    df_origen_eliminados = pd.read_csv("Consolidado_Segmentos_Red_SUNAT_ELIMINADOS.csv", sep=',')
-    df_origen_eliminados["key"] = df_origen_eliminados["Id_super_padre"].astype(str) + df_origen_eliminados["Id_P"].astype(str) + df_origen_eliminados["Id_H"].astype(str) + df_origen_eliminados["Id_N"].astype(str)
-    df_to_delete = df_to_delete.loc[~df_to_delete.key.isin(df_origen_eliminados.key)]
-    df_to_delete = pd.concat([df_origen_eliminados,df_to_delete],axis=0)
-    df_to_delete.drop(
-        "key", axis=1, inplace=True, errors="ignore"
-    )
     
-
+    try:
+        df_origen_eliminados = pd.read_csv("Consolidado_Segmentos_Red_SUNAT_ELIMINADOS.csv", sep=',')
+        df_origen_eliminados["key"] = (
+            df_origen_eliminados["Id_super_padre"].astype(str) + \
+            df_origen_eliminados["Id_P"].astype(str) + \
+            df_origen_eliminados["Id_H"].astype(str) + \
+            df_origen_eliminados["Id_N"].astype(str)
+        )
+        df_to_delete = df_to_delete.loc[~df_to_delete.key.isin(df_origen_eliminados.key)]
+        df_final_eliminados = pd.concat([df_origen_eliminados,df_to_delete],axis=0)
+    except FileNotFoundError: 
+        print("Creando Log de Eliminados...")
+        df_final_eliminados = pd.DataFrame(columns=df_origen.columns.tolist()+['fecha_eliminacion'])
+    
     df_final = pd.concat([df_to_update,df_to_insert], axis=0)
-    df_final.drop(
-        "key", axis=1, inplace=True, errors="ignore"
-    )
+    df_final.drop("key", axis=1, inplace=True, errors="ignore")
+    df_final_eliminados.drop("key", axis=1, inplace=True, errors="ignore")
 
-    return df_final, df_to_delete
+    return df_final, df_final_eliminados
