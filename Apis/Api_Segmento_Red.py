@@ -163,6 +163,10 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
     df_origen_eliminados["key"] = df_origen_eliminados["Id_super_padre"].astype(str) + df_origen_eliminados["Id_P"].astype(str) + df_origen_eliminados["Id_H"].astype(str) + df_origen_eliminados["Id_N"].astype(str)
     df_to_delete = df_to_delete.loc[~df_to_delete.key.isin(df_origen_eliminados.key)]
     df_to_delete = pd.concat([df_origen_eliminados,df_to_delete],axis=0)
+    df_to_delete.drop(
+        "key", axis=1, inplace=True, errors="ignore"
+    )
+    
 
     df_final = pd.concat([df_to_update,df_to_insert], axis=0)
     df_final.drop(
