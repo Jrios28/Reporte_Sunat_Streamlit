@@ -23,6 +23,7 @@ from dash import Dash, html, dcc, Input, Output
 import dash_bootstrap_components as dbc
 import datetime
 from datetime import datetime
+from ipaddress import IPv4Network
 
 #=================================Importación de Librerías IMG=====================================
 from PIL import Image
@@ -56,6 +57,7 @@ async def main():
     #dfConsolidado = obtener_datos_de_segmento_red()
     dfConsolidado = pd.read_csv('Consolidado_Segmentos_Red_SUNAT.csv', sep=',')
     #Convertir en nulo aquellos pesos (size) que sean mayores a la longitud 8
+    dfConsolidado['Size'] = dfConsolidado['Size'].astype(str)
     dfConsolidado['Size'] = dfConsolidado.apply(lambda x: np.nan if len(x['Size']) > 8 else x['Size'], axis=1)
     dfConsolidado['Size'] = dfConsolidado['Size'].astype('Int64')
     #dfConsolidado.info()
@@ -180,13 +182,29 @@ async def main():
         if st.button("Consultar API"):
             if id_nieto_input:
                 # Realiza una solicitud a la API con el ID_N ingresado
-                url_api = f'https://172.17.1.18/rest/v1/networks/{id_nieto_input}/free_addresses'
-                #url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
+                #url_api = f'https://172.17.1.18/rest/v1/networks/{id_nieto_input}/free_addresses'
+                url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
                 response = requests.get(url_api,
                                         verify=False,
                                         auth=HTTPBasicAuth('admin', 'password'))
                 if response.status_code == 200:
                     data_api = response.json()
+                    datos_free_ip = json.loads(response.text)
+
+                    address = dfConsolidado.loc[dfConsolidado["Id_N"] == int(id_nieto_input)].head(1)
+                    address = address.Address.iloc[0]
+                    print(address)
+
+                    n = IPv4Network(address, strict=False)
+                    ip_list = list(n)
+                    size = n.num_addresses
+
+                    nlist = [str(x) for x in ip_list]
+
+                    used_ips_lst = list(set(nlist).difference(datos_free_ip))
+                    print(used_ips_lst)
+
+
                     # Muestra los datos de la API
                     st.write("Datos de la API para ID_N (ID_NIETO) =", id_nieto_input)
                     st.json(data_api)
@@ -247,9 +265,6 @@ async def main():
         st.subheader("Exportación de Datos")
         if st.button("Exportar Datos a CSV"):
             df_seleccion.to_csv("datos_exportados.csv", index=False)
-
-
-
 
 
     #=================================Grafico Barra tipos de red================================
