@@ -4,8 +4,8 @@ from Apis.Api_Segmento_Red import obtener_datos_de_segmento_red, obtener_datos_d
 def main():
     print("Ejecutando CDC - Insert-Update-Delete...")
     df_origen = pd.read_csv("Consolidado_Segmentos_Red_SUNAT.csv", sep=',')
-    #df_nuevo = obtener_datos_de_segmento_red()
-    df_nuevo = pd.read_csv('Consolidado_Segmentos_Red_SUNAT_NUEVO.csv', sep=',')
+    df_nuevo = obtener_datos_de_segmento_red()
+    #df_nuevo = pd.read_csv('Consolidado_Segmentos_Red_SUNAT_NUEVO.csv', sep=',')
 
     df_final, df_eliminados = obtener_datos_de_cdc(df_origen,df_nuevo)
     print("Guardando ficheros actualizados...")

@@ -55,8 +55,9 @@ async def main():
 
     #dfConsolidado = obtener_datos_de_segmento_red()
     dfConsolidado = pd.read_csv('Consolidado_Segmentos_Red_SUNAT.csv', sep=',')
-    #st.dataframe(dfConsolidado)
-    dfConsolidado['Size'] = dfConsolidado['Size'].astype(int)
+    #Convertir en nulo aquellos pesos (size) que sean mayores a la longitud 8
+    dfConsolidado['Size'] = dfConsolidado.apply(lambda x: np.nan if len(x['Size']) > 8 else x['Size'], axis=1)
+    dfConsolidado['Size'] = dfConsolidado['Size'].astype('Int64')
     #dfConsolidado.info()
 
 
@@ -111,12 +112,6 @@ async def main():
     # ================================ARBOL JERARQUICO=======================================#
 
     df_seleccion_arbol = dfConsolidado.copy()
-    #df_seleccion_arbol["Id_P"] = dfConsolidado["Id_P"].to_string()
-    #df_seleccion_arbol["Id_H"] = dfConsolidado["Id_H"].to_string()
-    #df_seleccion_arbol["Id_N"] = dfConsolidado["Id_N"].to_string()
-    #df_seleccion_arbol.info()
-    #df_seleccion_arbol.shape
-
 
     # Título de la aplicación
     st.header("1. Disponibilidad Jerarquica de Segmentos")
@@ -173,10 +168,7 @@ async def main():
                         #st.dataframe(bisnietos_df)
 
         # Mostrar la estructura jerárquica en Streamlit
-        #st.text("Jerarquía de Segmentos de Red:")
         display_tree("root")
-        # Ahora puedes usar bisnietos_df para mostrar los datos de los bisnietos en Streamlit
-        #st.subheader("Datos de Bisnietos")
 
 
 
@@ -188,7 +180,8 @@ async def main():
         if st.button("Consultar API"):
             if id_nieto_input:
                 # Realiza una solicitud a la API con el ID_N ingresado
-                url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
+                url_api = f'https://172.17.1.18/rest/v1/networks/{id_nieto_input}/free_addresses'
+                #url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
                 response = requests.get(url_api,
                                         verify=False,
                                         auth=HTTPBasicAuth('admin', 'password'))
@@ -281,15 +274,16 @@ async def main():
     st.header("4. Consolidado por Fechas")
     with st.expander("Ver"):
 
-        df_seleccion_arbol['DATE'] = pd.to_datetime(df_seleccion_arbol['DATE'],format='%Y/%m/%d')
+        #df_seleccion_arbol['DATE'] = pd.to_datetime(df_seleccion_arbol['DATE'],format='%Y/%m/%d')
 
         # Filtrar el DataFrame según el rango de fechas seleccionado
         filtered_df = df_seleccion_arbol[(df_seleccion_arbol['DATE'] >= start_date.strftime('%Y/%m/%d')) & (df_seleccion_arbol['DATE'] <= end_date.strftime('%Y/%m/%d'))]
 
+
         # Mostrar los datos filtrados
         st.subheader('Información filtrada:')
         st.write(filtered_df)
-        df_seleccion_arbol.info()
+        #df_seleccion_arbol.info()
 
     ####################===================================================================#################
 

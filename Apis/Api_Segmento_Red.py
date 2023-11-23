@@ -13,8 +13,13 @@ from datetime import date
 import streamlit as st
 from dateutil import tz
 
-url_padre = "https://10.10.129.41/rest/v1/networks"
+#url_padre = "https://10.10.129.41/rest/v1/networks"
+url_padre = "https://172.17.1.18/rest/v1/networks"
+#172.17.1.18
 
+def main():
+    obtener_datos_de_segmento_red()
+    return
 
 @st.cache(allow_output_mutation=True)
 def obtener_datos_de_segmento_red():
@@ -49,7 +54,8 @@ def obtener_datos_de_segmento_red():
     for index, row in df_padre.iterrows():
         id_padre = row['ID_PADRE']
         # Obtener datos de nivel de hijo para el ID_PADRE actual
-        url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
+        # url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
+        url_hijo = f'https://172.17.1.18/rest/v1/networks/{id_padre}/children'
         response_hijo = requests.get(url_hijo,
                                      verify=False,
                                      auth=HTTPBasicAuth('admin', 'password'))
@@ -70,7 +76,8 @@ def obtener_datos_de_segmento_red():
             id_hijo = row_hijo["ID_HIJO"]
 
             # Obtener datos del nivel de nieto para el ID_HIJO actual
-            url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
+            url_nieto = f'https://172.17.1.18/rest/v1/networks/{id_hijo}/children'
+            # url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
             response_nieto = requests.get(url_nieto,
                                           verify=False,
                                           auth=HTTPBasicAuth('admin', 'password'))
@@ -144,8 +151,7 @@ def obtener_datos_de_segmento_red():
 
 
 def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
-    df_origen["key"] = (
-        df_origen["Id_super_padre"].astype(str) + \
+    df_origen["key"] = (df_origen["Id_super_padre"].astype(str) + \
         df_origen["Id_P"].astype(str) + \
         df_origen["Id_H"].astype(str) + \
         df_origen["Id_N"].astype(str)
@@ -191,3 +197,6 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
     df_final_eliminados.drop("key", axis=1, inplace=True, errors="ignore")
 
     return df_final, df_final_eliminados
+
+if __name__ == '__main__':
+    main()
