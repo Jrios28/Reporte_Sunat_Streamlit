@@ -13,13 +13,16 @@ from datetime import date
 import streamlit as st
 from dateutil import tz
 
-url_padre = "https://10.10.129.41/rest/v1/networks"
-#url_padre = "https://172.17.1.18/rest/v1/networks"
-#172.17.1.18
+# url_padre = "https://10.10.129.41/rest/v1/networks"
+url_padre = "https://172.17.1.18/rest/v1/networks"
+
+
+# 172.17.1.18
 
 def main():
     obtener_datos_de_segmento_red()
     return
+
 
 @st.cache(allow_output_mutation=True)
 def obtener_datos_de_segmento_red():
@@ -27,9 +30,12 @@ def obtener_datos_de_segmento_red():
                             verify=False,
                             auth=HTTPBasicAuth('admin', 'password'))
     datos = json.loads(response.text)
+
     datos_segmento_red = [t["network"] for t in datos]
-    filtered_data = [d for d in datos_segmento_red if d['network_location'] == '506' or d['network_location'] == '-1']
+    filtered_data = [d for d in datos_segmento_red if d['network_location'] == '165' or d['network_location'] == '-1']
+    # filtered_data = [d for d in datos_segmento_red if d['network_location'] == '506' or d['network_location'] == '-1']
     df = pd.DataFrame(filtered_data)
+
     df1 = df[['network_id', 'network_name', 'network_location', 'network_type']]
     # Obtener los valores de la primera fila
     primer_fila = df1.iloc[0]
@@ -43,7 +49,7 @@ def obtener_datos_de_segmento_red():
     df2 = df2.drop(0, axis=0)
 
     today = date.today()
-    df_padre = df2[['ID_SUPER_PADRE','SUPER_PADRE_NAME','ID_PADRE','NAME','TYPE']]
+    df_padre = df2[['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME', 'TYPE']]
     df_padre["DATE"] = today.strftime("%Y/%m/%d")
 
     # Crear DataFrames temporales para el nivel de hijo y nieto
@@ -54,12 +60,13 @@ def obtener_datos_de_segmento_red():
     for index, row in df_padre.iterrows():
         id_padre = row['ID_PADRE']
         # Obtener datos de nivel de hijo para el ID_PADRE actual
-        url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
-        #url_hijo = f'https://172.17.1.18/rest/v1/networks/{id_padre}/children'
+        # url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
+        url_hijo = f'https://172.17.1.18/rest/v1/networks/{id_padre}/children'
         response_hijo = requests.get(url_hijo,
                                      verify=False,
                                      auth=HTTPBasicAuth('admin', 'password'))
         data_hijo = response_hijo.json()
+
         data_hijo2 = [t["network"] for t in data_hijo]
         df_hijo_temp = pd.DataFrame({"ID_HIJO": [t["network_id"] for t in data_hijo2],
                                      "NAME_CHILD": [t["network_name"] for t in data_hijo2],
@@ -68,7 +75,7 @@ def obtener_datos_de_segmento_red():
                                      "TYPE": [t["network_type"] for t in data_hijo2],
                                      "SIZE": [t["network_size"] for t in data_hijo2]
                                      })
-        #df_hijo = df_hijo.append(df_hijo_temp, ignore_index=True)
+        # df_hijo = df_hijo.append(df_hijo_temp, ignore_index=True)
         # Agregar los datos al DataFrame df_hijo
         df_hijo = pd.concat([df_hijo, df_hijo_temp], ignore_index=True)
         # Iterar a través de los registros del nivel de hijo
@@ -76,8 +83,8 @@ def obtener_datos_de_segmento_red():
             id_hijo = row_hijo["ID_HIJO"]
 
             # Obtener datos del nivel de nieto para el ID_HIJO actual
-            # url_nieto = f'https://172.17.1.18/rest/v1/networks/{id_hijo}/children'
-            url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
+            url_nieto = f'https://172.17.1.18/rest/v1/networks/{id_hijo}/children'
+            # url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
             response_nieto = requests.get(url_nieto,
                                           verify=False,
                                           auth=HTTPBasicAuth('admin', 'password'))
@@ -93,7 +100,7 @@ def obtener_datos_de_segmento_red():
                                           "SIZE": [t["network_size"] for t in data_nieto2],
                                           "ADDRESS": [t["network_address"] for t in data_nieto2]
                                           })
-            #df_nieto = df_nieto.append(df_nieto_temp, ignore_index=True)
+            # df_nieto = df_nieto.append(df_nieto_temp, ignore_index=True)
             df_nieto = pd.concat([df_nieto, df_nieto_temp], ignore_index=True)
 
     df_hijo['LOCATION'] = df_hijo['LOCATION'].astype(int)
@@ -106,7 +113,6 @@ def obtener_datos_de_segmento_red():
     df_nieto = df_nieto.rename(columns={
         "LOCATION": "ID_FK_HIJO"
     })
-
 
     df_consolidado = df_nieto.merge(df_hijo, left_on="ID_FK_HIJO", right_on="ID_HIJO", how="inner")
     # Renombra las columnas para mayor claridad
@@ -122,11 +128,13 @@ def obtener_datos_de_segmento_red():
     })
     df_consolidado_general = df_consolidado.merge(df_padre, left_on="ID_FK_PADRE", right_on="ID_PADRE", how="inner")
 
-    df_consolidado_jerarquico = df_consolidado_general[['ID_SUPER_PADRE','SUPER_PADRE_NAME','ID_PADRE','NAME','TYPE','ID_HIJO','NAME_HIJO','TYPE_HIJO','ID_NIETO','NAME_NIETO','TYPE_NIETO', 'ADDRESS','SIZE_NIETO','DATE']]
+    df_consolidado_jerarquico = df_consolidado_general[
+        ['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME', 'TYPE', 'ID_HIJO', 'NAME_HIJO', 'TYPE_HIJO',
+         'ID_NIETO', 'NAME_NIETO', 'TYPE_NIETO', 'ADDRESS', 'SIZE_NIETO', 'DATE']]
 
     df_consolidado_jerarquico = df_consolidado_jerarquico.rename(columns={
-        "ID_SUPER_PADRE":"Id_super_padre",
-        "SUPER_PADRE_NAME":"Super_Padre_Name",
+        "ID_SUPER_PADRE": "Id_super_padre",
+        "SUPER_PADRE_NAME": "Super_Padre_Name",
         "ID_PADRE": "Id_P",
         "NAME": "Nombre_P",
         "TYPE": "Tipo_P",
@@ -141,10 +149,10 @@ def obtener_datos_de_segmento_red():
     })
 
     # Obtener la fecha y hora actual
-    #now = datetime.now()
+    # now = datetime.now()
     # Formatear la fecha y hora en el formato deseado
-    #fecha_hora_actual = now.strftime('%d/%m/%Y %H:%M:%S')
-    #df_consolidado_jerarquico["DATE_TIME"] = fecha_hora_actual
+    # fecha_hora_actual = now.strftime('%d/%m/%Y %H:%M:%S')
+    # df_consolidado_jerarquico["DATE_TIME"] = fecha_hora_actual
     df_consolidado_jerarquico.to_csv("Consolidado_Segmentos_Red_SUNAT.csv", index=False)
 
     return df_consolidado_jerarquico
@@ -152,15 +160,15 @@ def obtener_datos_de_segmento_red():
 
 def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
     df_origen["key"] = (df_origen["Id_super_padre"].astype(str) + \
-        df_origen["Id_P"].astype(str) + \
-        df_origen["Id_H"].astype(str) + \
-        df_origen["Id_N"].astype(str)
-    )
+                        df_origen["Id_P"].astype(str) + \
+                        df_origen["Id_H"].astype(str) + \
+                        df_origen["Id_N"].astype(str)
+                        )
     df_nuevo["key"] = (
-        df_nuevo["Id_super_padre"].astype(str) + \
-        df_nuevo["Id_P"].astype(str) + \
-        df_nuevo["Id_H"].astype(str) + \
-        df_nuevo["Id_N"].astype(str)
+            df_nuevo["Id_super_padre"].astype(str) + \
+            df_nuevo["Id_P"].astype(str) + \
+            df_nuevo["Id_H"].astype(str) + \
+            df_nuevo["Id_N"].astype(str)
     )
 
     ### Insert
@@ -169,7 +177,7 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
     ### Update
     df_to_update = df_nuevo.loc[df_nuevo.key.isin(df_origen.key.tolist())]
     df_to_update.drop("DATE", axis=1, inplace=True, errors="ignore")
-    df_to_update = pd.merge(df_to_update, df_origen[["key","DATE"]],how='left',on="key")
+    df_to_update = pd.merge(df_to_update, df_origen[["key", "DATE"]], how='left', on="key")
 
     ### Delete
     df_to_delete = df_origen.loc[~df_origen.key.isin(df_nuevo.key.tolist())]
@@ -177,26 +185,27 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
     to_zone = tz.gettz()
     today_zone = datetime.now(to_zone).strftime("%Y-%m-%d %H:%M:%S")
     df_to_delete["fecha_eliminacion"] = today_zone
-    
+
     try:
         df_origen_eliminados = pd.read_csv("Consolidado_Segmentos_Red_SUNAT_ELIMINADOS.csv", sep=',')
         df_origen_eliminados["key"] = (
-            df_origen_eliminados["Id_super_padre"].astype(str) + \
-            df_origen_eliminados["Id_P"].astype(str) + \
-            df_origen_eliminados["Id_H"].astype(str) + \
-            df_origen_eliminados["Id_N"].astype(str)
+                df_origen_eliminados["Id_super_padre"].astype(str) + \
+                df_origen_eliminados["Id_P"].astype(str) + \
+                df_origen_eliminados["Id_H"].astype(str) + \
+                df_origen_eliminados["Id_N"].astype(str)
         )
         df_to_delete = df_to_delete.loc[~df_to_delete.key.isin(df_origen_eliminados.key)]
-        df_final_eliminados = pd.concat([df_origen_eliminados,df_to_delete],axis=0)
-    except FileNotFoundError: 
+        df_final_eliminados = pd.concat([df_origen_eliminados, df_to_delete], axis=0)
+    except FileNotFoundError:
         print("Creando Log de Eliminados...")
-        df_final_eliminados = pd.DataFrame(columns=df_origen.columns.tolist()+['fecha_eliminacion'])
-    
-    df_final = pd.concat([df_to_update,df_to_insert], axis=0)
+        df_final_eliminados = pd.DataFrame(columns=df_origen.columns.tolist() + ['fecha_eliminacion'])
+
+    df_final = pd.concat([df_to_update, df_to_insert], axis=0)
     df_final.drop("key", axis=1, inplace=True, errors="ignore")
     df_final_eliminados.drop("key", axis=1, inplace=True, errors="ignore")
 
     return df_final, df_final_eliminados
+
 
 if __name__ == '__main__':
     main()
