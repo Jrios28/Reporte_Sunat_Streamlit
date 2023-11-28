@@ -55,44 +55,48 @@ async def main():
 
     #dfConsolidado = obtener_datos_de_segmento_red()
     dfConsolidado = pd.read_csv('Consolidado_Segmentos_Red_SUNAT.csv', sep=',')
+
     #Convertir en nulo aquellos pesos (size) que sean mayores a la longitud 8
-    dfConsolidado['Size'] = dfConsolidado['Size'].map(lambda x : int(x) if isinstance(x,float) else x)
+    #dfConsolidado['Size'] = dfConsolidado['Size'].map(lambda x : int(x) if isinstance(x,float) else x)
+    dfConsolidado['Size'] = dfConsolidado['Size'].map(lambda x: int(x) if (isinstance(x, float) and not np.isnan(x)) else x)
     dfConsolidado['Size'] = dfConsolidado['Size'].astype(str)
     dfConsolidado['Size'] = dfConsolidado.apply(lambda x: np.nan if len(x['Size']) > 8 else x['Size'], axis=1)
     dfConsolidado['Size'] = dfConsolidado['Size'].astype(float).astype('Int64')
-    #dfConsolidado.info()
+    dfConsolidado['Id_H'] = dfConsolidado['Id_H'].astype('Int64')
+    dfConsolidado['Id_N'] = dfConsolidado['Id_N'].astype('Int64')
+    dfConsolidado['Id_P'] = dfConsolidado['Id_P'].astype('Int64')
+
 
 
     #====================================================SIDEBAR=======================================#
-    st.sidebar.header("Filtros:")
-    nt = st.sidebar.multiselect(
-        "Selecciona el tipo de red:",
-         options=dfConsolidado["Tipo_N"].unique(),
-         default=dfConsolidado["Tipo_N"].unique()
-    )
+    #st.sidebar.header("Filtros:")
+    #nt = st.sidebar.multiselect(
+    #    "Selecciona el tipo de red:",
+    #     options=dfConsolidado["Tipo_N"].unique(),
+    #     default=dfConsolidado["Tipo_N"].unique()
+    #)
 
-    nz = st.sidebar.multiselect(
-        "Selecciona tamaño de red:",
-        options=dfConsolidado["Size"].unique(),
-        default=dfConsolidado["Size"].unique()
-    )
+    #nz = st.sidebar.multiselect(
+    #    "Selecciona tamaño de red:",
+    #    options=dfConsolidado["Size"].unique(),
+    #    default=dfConsolidado["Size"].unique()
+    #)
+    #df_seleccion = dfConsolidado[(dfConsolidado["Tipo_N"].isin(nt) & dfConsolidado["Size"].isin(nz))]
 
-    df_seleccion = dfConsolidado[(dfConsolidado["Tipo_N"].isin(nt) & dfConsolidado["Size"].isin(nz))]
 
-
-    total_Ips = int(len(df_seleccion["Address"]))
-    totalTipoSupernet = int(len(df_seleccion[df_seleccion["Tipo_N"]=="supernet"]))
-    totalTipoLan= int(len(df_seleccion[df_seleccion["Tipo_N"]=="lan"]))
+    total_Ips = int(len(dfConsolidado["Address"]))
+    totalTipoSupernet = int(len(dfConsolidado[dfConsolidado["Tipo_P"]=="supernet"]))
+    totalTipoLan= int(len(dfConsolidado[dfConsolidado["Tipo_P"]=="lan"]))
 
     left_column, middle_column, right_column = st.columns(3)
     with left_column:
-        st.subheader("IP's Totales:")
+        st.subheader("Total Segmentos:")
         st.subheader(total_Ips)
     with middle_column:
-        st.subheader("IP's Lan:")
+        st.subheader("LAN:")
         st.subheader(totalTipoLan)
     with right_column:
-        st.subheader("IP's Supernet:")
+        st.subheader("Supernet:")
         st.subheader(totalTipoSupernet)
     st.markdown("---")
 
@@ -108,12 +112,7 @@ async def main():
     start_date = st.sidebar.date_input('Fecha de inicio', value=min_date)
     end_date = st.sidebar.date_input('Fecha de fin', max_value=max_date)
 
-
-
-
     # ================================ARBOL JERARQUICO=======================================#
-
-    df_seleccion_arbol = dfConsolidado.copy()
 
     # Título de la aplicación
     st.header("1. Disponibilidad Jerarquica de Segmentos")
@@ -133,12 +132,13 @@ async def main():
             tree.create_node(tag=tag, identifier=node_id, parent=parent_id)
 
         # Iterar a través de los datos y agregar nodos al árbol
-        for index, row in df_seleccion_arbol.iterrows():
+        for index, row in dfConsolidado.iterrows():
             id_sp = str(row["Id_super_padre"])
             id_p = str(row["Id_P"])
             id_h = str(row["Id_H"])
             id_n = str(row["Id_N"])
-            nombre_n = "ID : " + str(row["Id_N"]) + " Nombre:  " + row["Nombre_N"] + " IP : " + str(row["Address"])
+            #nombre_n = "ID : " + str(row["Id_N"]) + " Nombre:  " + row["Nombre_N"] + " IP : " + str(row["Address"])
+            nombre_n = f"ID: {row['Id_N']} Nombre: {str(row['Nombre_N'])} IP: {str(row['Address'])}"
 
             if id_sp not in node_mapping:
                 tree.create_node(row["Super_Padre_Name"], id_sp, parent="root")
@@ -182,8 +182,8 @@ async def main():
         if st.button("Consultar API"):
             if id_nieto_input:
                 # Realiza una solicitud a la API con el ID_N ingresado
-                url_api = f'https://172.17.1.18/rest/v1/networks/{id_nieto_input}/free_addresses'
-                #url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
+                #url_api = f'https://172.17.1.18/rest/v1/networks/{id_nieto_input}/free_addresses'
+                url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
                 response = requests.get(url_api,
                                         verify=False,
                                         auth=HTTPBasicAuth('admin', 'password'))
@@ -201,13 +201,11 @@ async def main():
     st.header("2. Consolidado de Redes con Subredes")
     # Reportes Detallados
     with st.expander("Ver"):
-        #st.write("Selecciona un rango de registros:")
-        #start_idx, end_idx = st.slider("Seleccionar Rango", 0, len(df_seleccion), (0, len(df_seleccion)))
-        #selected_data = df_seleccion.iloc[start_idx:end_idx]
-        #st.write(selected_data)
+
+        #df_seleccion_arbol = dfConsolidado.copy()
 
         # Filtrar registros únicos por Id_N y Address
-        redes_padre = df_seleccion_arbol.drop_duplicates(subset=["Id_N", "Address"])[
+        redes_padre = dfConsolidado.drop_duplicates(subset=["Id_N", "Address"])[
             ["Id_P", "Nombre_P", "Id_N", "Nombre_N", "Address"]]
         redes_padre.reset_index(drop=True, inplace=True)
 
@@ -218,7 +216,7 @@ async def main():
         selected_red_padre = st.selectbox("Selecciona una red padre (Id_P):", redes_padre["Id_P"].unique())
 
         # Filtrar registros hijas (Id_H) según la red padre seleccionada
-        redes_hijas = df_seleccion_arbol[df_seleccion_arbol["Id_P"] == selected_red_padre].drop_duplicates(
+        redes_hijas = dfConsolidado[dfConsolidado["Id_P"] == selected_red_padre].drop_duplicates(
             subset=["Id_H", "Nombre_H"])[
             ["Id_H", "Nombre_H"]]
         redes_hijas.reset_index(drop=True, inplace=True)
@@ -227,8 +225,8 @@ async def main():
         selected_red_hija = st.selectbox("Selecciona una red hija (Id_H):", redes_hijas["Id_H"])
 
         # Filtrar registros nietas (Id_N) según la red hija seleccionada
-        redes_nietas = df_seleccion_arbol[
-            (df_seleccion_arbol["Id_P"] == selected_red_padre) & (df_seleccion_arbol["Id_H"] == selected_red_hija)][
+        redes_nietas = dfConsolidado[
+            (dfConsolidado["Id_P"] == selected_red_padre) & (dfConsolidado["Id_H"] == selected_red_hija)][
             ["Id_N", "Nombre_N", "Address"]]
         redes_nietas.reset_index(drop=True, inplace=True)
 
@@ -248,7 +246,7 @@ async def main():
         # Exportación de Datos
         st.subheader("Exportación de Datos")
         if st.button("Exportar Datos a CSV"):
-            df_seleccion.to_csv("datos_exportados.csv", index=False)
+            dfConsolidado.to_csv("datos_exportados.csv", index=False)
 
 
 
@@ -260,7 +258,7 @@ async def main():
     with st.expander("Ver"):
         # Distribución de Tipos de Red
         st.subheader("Distribución de Tipos de Red")
-        tipo_red_counts = df_seleccion['Tipo_N'].value_counts()
+        tipo_red_counts = dfConsolidado['Tipo_P'].value_counts()
         st.bar_chart(tipo_red_counts)
 
         #=================================Grafico mapa de calord================================
@@ -268,7 +266,7 @@ async def main():
         # Relación entre Proveedores y Hardware (Mapa de Calor)
         st.subheader("Relación entre Segmentos de Red padre y sus Hijos")
         plt.figure(figsize=(10, 6))  # Establece el tamaño de la figura
-        proveedor_hardware_counts = df_seleccion.groupby(['Nombre_P', 'Nombre_H']).size().unstack().fillna(0)
+        proveedor_hardware_counts = dfConsolidado.groupby(['Nombre_P', 'Nombre_H']).size().unstack().fillna(0)
         sns.heatmap(proveedor_hardware_counts, cmap="YlGnBu", annot=True, linewidths=0.5)
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot()
@@ -276,10 +274,10 @@ async def main():
     st.header("4. Consolidado por Fechas")
     with st.expander("Ver"):
 
-        #df_seleccion_arbol['DATE'] = pd.to_datetime(df_seleccion_arbol['DATE'],format='%Y/%m/%d')
+        #dfConsolidado['DATE'] = pd.to_datetime(dfConsolidado['DATE'],format='%d/%m/%Y')
 
         # Filtrar el DataFrame según el rango de fechas seleccionado
-        filtered_df = df_seleccion_arbol[(df_seleccion_arbol['DATE'] >= start_date.strftime('%Y/%m/%d')) & (df_seleccion_arbol['DATE'] <= end_date.strftime('%Y/%m/%d'))]
+        filtered_df = dfConsolidado[(dfConsolidado['DATE'] >= start_date.strftime('%d/%m/%Y')) & (dfConsolidado['DATE'] <= end_date.strftime('%d/%m/%Y'))]
 
 
         # Mostrar los datos filtrados
