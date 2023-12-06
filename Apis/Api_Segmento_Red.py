@@ -12,11 +12,12 @@ from datetime import datetime
 from datetime import date
 import streamlit as st
 from dateutil import tz
+from Envio_Correo import enviar_correo
 
 urllib3.disable_warnings()
 
-url_padre = "https://10.10.129.41/rest/v1/networks?type="
-#url_padre = "https://172.17.1.18/rest/v1/networks?type="
+#url_padre = "https://10.10.129.41/rest/v1/networks?type="
+url_padre = "https://172.17.1.18/rest/v1/networks"
 
 
 # 172.17.1.18
@@ -34,8 +35,8 @@ def obtener_datos_de_segmento_red():
     datos = json.loads(response.text)
 
     datos_segmento_red = [t["network"] for t in datos]
-    #filtered_data = [d for d in datos_segmento_red if d['network_location'] == '165' or d['network_location'] == '-1']
-    filtered_data = [d for d in datos_segmento_red if d['network_location'] == '506' or d['network_location'] == '-1']
+    filtered_data = [d for d in datos_segmento_red if d['network_location'] == '165' or d['network_location'] == '-1']
+    #filtered_data = [d for d in datos_segmento_red if d['network_location'] == '506' or d['network_location'] == '-1']
     df = pd.DataFrame(filtered_data)
     df1 = df[['network_id', 'network_name', 'network_address', 'network_location', 'network_type']]
     # Obtener los valores de la primera fila
@@ -64,8 +65,8 @@ def obtener_datos_de_segmento_red():
     for index, row in df_padre.iterrows():
         id_padre = row['ID_PADRE']
         # Obtener datos de nivel de hijo para el ID_PADRE actual
-        url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
-        #url_hijo = f'https://172.17.1.18/rest/v1/networks/{id_padre}/children'
+        #url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
+        url_hijo = f'https://172.17.1.18/rest/v1/networks/{id_padre}/children'
         response_hijo = requests.get(url_hijo,
                                      verify=False,
                                      auth=HTTPBasicAuth('admin', 'password'))
@@ -87,8 +88,8 @@ def obtener_datos_de_segmento_red():
             id_hijo = row_hijo["ID_HIJO"]
 
             # Obtener datos del nivel de nieto para el ID_HIJO actual
-            #url_nieto = f'https://172.17.1.18/rest/v1/networks/{id_hijo}/children'
-            url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
+            url_nieto = f'https://172.17.1.18/rest/v1/networks/{id_hijo}/children'
+            #url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
             response_nieto = requests.get(url_nieto,
                                           verify=False,
                                           auth=HTTPBasicAuth('admin', 'password'))
@@ -189,10 +190,24 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
     today_zone = datetime.now(to_zone).strftime("%Y-%m-%d %H:%M:%S")
     df_to_delete["fecha_eliminacion"] = today_zone
 
-    #Creating df for new data and then put in csv
-    df_nuevos = df_to_insert[["Id_super_padre","Super_Padre_Name","Id_P","Nombre_P","P_Address","Tipo_P","Id_H","Nombre_H","Tipo_H","Id_N","Nombre_N","Tipo_N","Address","Size"]]
-    df_nuevos["fecha_nuevo"] = today_zone
-    df_nuevos.to_csv("Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv", index=False)
+    if len(df_to_insert) > 0:        
+        #Creating df for new data and then put in csv
+        df_nuevos = df_to_insert[["Id_super_padre","Super_Padre_Name","Id_P","Nombre_P","P_Address","Tipo_P","Id_H","Nombre_H","Tipo_H","Id_N","Nombre_N","Tipo_N","Address","Size"]]
+        df_nuevos["fecha_nuevo"] = today_zone
+        df_nuevos.to_csv("Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv", index=False)
+        
+        today = date.today()
+        fecha_actual = today.strftime("%Y/%m/%d")
+        
+        destinatario = ['wmayorga@sunat.gob.pe','jbarbadillo@sunat.gob.pe','cposadas@sunat.gob.pe','fsandoval@electrodata.com.pe','jrios@electrodata.com.pe','ftafur@electrodata.com.pe']
+        asunto = 'Reporte Segmentos Nuevos'
+        mensaje = f'Hola, Se ha generado el reporte de Segmentos Nuevos a la fecha de {fecha_actual}.'
+        adjunto_path = '/home/pc_report/Reporte_Sunat_Streamlit/Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv'
+
+        enviar_correo(destinatario, asunto, mensaje, adjunto_path)    
+    else:
+        "El df_to_insert esta vacío"    
+
 
     try:
         df_origen_eliminados = pd.read_csv("Consolidado_Segmentos_Red_SUNAT_ELIMINADOS.csv", sep=',')
