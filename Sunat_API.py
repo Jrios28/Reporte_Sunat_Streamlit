@@ -125,6 +125,8 @@ async def main():
         # Diccionario para mapear los nodos en el árbol
         node_mapping = {"root": "Root"}
 
+        data_list = []
+
         # Función para agregar nodos con espaciado a la derecha
         def add_node_with_spacing(node_id, parent_id, label, spacing):
             parent = tree.get_node(parent_id)
@@ -137,13 +139,20 @@ async def main():
             id_p = str(row["Id_P"])
             id_h = str(row["Id_H"])
             id_n = str(row["Id_N"])
-            #nombre_n = "ID : " + str(row["Id_N"]) + " Nombre:  " + row["Nombre_N"] + " IP : " + str(row["Address"])
+
+            data_dict = {
+                "ID": row["Id_N"],
+                "Nombre": row["Nombre_N"],
+                "IP": row["Address"]
+            }
+            data_list.append(data_dict)
+            df_nombre_n = pd.DataFrame(data_list)
+
             nombre_n = f"ID: {row['Id_N']} Nombre: {str(row['Nombre_N'])} IP: {str(row['Address'])}"
 
             if id_sp not in node_mapping:
                 tree.create_node(row["Super_Padre_Name"], id_sp, parent="root")
                 node_mapping[id_sp] = row["Super_Padre_Name"]
-
             #aqui muestro el padre
             if id_p not in node_mapping:
                 add_node_with_spacing(id_p, id_sp, row["Nombre_P"] + "/  ID: " + str(row["Id_P"]), spacing=2)
@@ -155,7 +164,9 @@ async def main():
             # aqui muestro el nieto
             if id_n not in node_mapping:
                 add_node_with_spacing(id_n, id_h, nombre_n, spacing=6)
+                #add_node_with_spacing(id_n, id_h, df_nombre_n, spacing=6)
                 node_mapping[id_n] = nombre_n
+                #node_mapping[id_n] = st.write(df_nombre_n)
 
 
 
@@ -277,7 +288,7 @@ async def main():
         #dfConsolidado['DATE'] = pd.to_datetime(dfConsolidado['DATE'],format='%d/%m/%Y')
 
         # Filtrar el DataFrame según el rango de fechas seleccionado
-        filtered_df = dfConsolidado[(dfConsolidado['DATE'] >= start_date.strftime('%d/%m/%Y')) & (dfConsolidado['DATE'] <= end_date.strftime('%d/%m/%Y'))]
+        filtered_df = dfConsolidado[(dfConsolidado['DATE'] >= start_date.strftime('%Y/%m/%d')) & (dfConsolidado['DATE'] <= end_date.strftime('%Y/%m/%d'))]
 
 
         # Mostrar los datos filtrados
