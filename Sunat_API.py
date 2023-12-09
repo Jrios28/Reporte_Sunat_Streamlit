@@ -68,7 +68,7 @@ async def main():
 
 
 
-    #====================================================SIDEBAR=======================================#
+    #==========================================SIDEBAR============================================#
     #st.sidebar.header("Filtros:")
     #nt = st.sidebar.multiselect(
     #    "Selecciona el tipo de red:",
@@ -83,6 +83,19 @@ async def main():
     #)
     #df_seleccion = dfConsolidado[(dfConsolidado["Tipo_N"].isin(nt) & dfConsolidado["Size"].isin(nz))]
 
+    #-----------------------------------------Fechas-----------------------------------------------
+    fechaActual = datetime.now()
+
+    # Sidebar para seleccionar el rango de fechas
+    st.sidebar.header('Filtro de Fechas')
+
+    min_date = fechaActual
+    max_date = fechaActual
+
+    start_date = st.sidebar.date_input('Fecha de inicio', value=min_date)
+    end_date = st.sidebar.date_input('Fecha de fin', max_value=max_date)
+
+    #--------------------------------------------------------------------------------------------------
 
     total_Ips = int(len(dfConsolidado["Address"]))
     totalTipoSupernet = int(len(dfConsolidado[dfConsolidado["Tipo_P"]=="supernet"]))
@@ -100,17 +113,7 @@ async def main():
         st.subheader(totalTipoSupernet)
     st.markdown("---")
 
-    #-----------------------------------------Fechas-----------------------------------------------
-    fechaActual = datetime.now()
 
-    # Sidebar para seleccionar el rango de fechas
-    st.sidebar.header('Filtro de Fechas')
-
-    min_date = fechaActual
-    max_date = fechaActual
-
-    start_date = st.sidebar.date_input('Fecha de inicio', value=min_date)
-    end_date = st.sidebar.date_input('Fecha de fin', max_value=max_date)
 
     # ================================ARBOL JERARQUICO=======================================#
 
@@ -186,27 +189,80 @@ async def main():
 
 
     # ===================================Consulta Segmentos Libres================================
-        st.subheader("Consulta IP's libres por segmento")
-        id_nieto_input = st.text_input("Ingrese id Segmento de red")
-        st.write(id_nieto_input)
+        st.subheader("Consulta Porcentaje IP's libres por segmento")
+        file_path = "D:/Electrodata/11.SUNAT/SunatAPI/ConsumoIPsLibre.xlsx"
+        df_IpLibre = pd.read_excel(file_path)
 
-        if st.button("Consultar API"):
-            if id_nieto_input:
-                # Realiza una solicitud a la API con el ID_N ingresado
-                #url_api = f'https://172.17.1.18/rest/v1/networks/{id_nieto_input}/free_addresses'
-                url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
-                response = requests.get(url_api,
-                                        verify=False,
-                                        auth=HTTPBasicAuth('admin', 'password'))
-                if response.status_code == 200:
-                    data_api = response.json()
-                    # Muestra los datos de la API
-                    st.write("Datos de la API para ID_N (ID_NIETO) =", id_nieto_input)
-                    st.json(data_api)
-                else:
-                    st.error("No se encontraron datos para el segmento ID_N ingresado.")
-            else:
-                st.warning("Ingresa un Segmento ID_N antes de consultar la API.")
+        # --------------------------------Sidebar Filtro Segementos libres-----------------------------------
+        # Mostrar el DataFrame resultante
+
+        gd = GridOptionsBuilder.from_dataframe(df_IpLibre)
+
+        # Definir código JavaScript para personalizar los encabezados de las columnas
+        custom_header_code = JsCode("""
+        function(params) {
+            var columnFieldMapping = {
+                'ID_N': 'Id',
+                'ADDRESS': 'Address',
+                'NOMBRE': 'Nombre',
+                'NRO_IPS_TOTALES': 'Total',
+                'NRO_IPS_LIBRES': 'Libres',
+                'PORCENTAJE_IPS_LIBRES': 'Porcentaje'
+            };
+            return columnFieldMapping[params.colDef.field];
+        }
+        """)
+
+        # Aplicar la función de JavaScript para personalizar los encabezados de las columnas
+        for col in df_IpLibre.columns:
+            gd.configure_column(col, headerValueGetter=custom_header_code)
+
+        gd.configure_pagination(enabled=True)
+        gd.configure_default_column(editable=True,groupable=True)
+
+        sel_mode = st.radio('Tipo de Selección', options=['Uno','Multiple'])
+        gd.configure_selection(selection_mode=sel_mode, use_checkbox=True)
+        gridoptions = gd.build()
+        grid_table = AgGrid(df_IpLibre,
+                            gridOptions=gridoptions,
+                            update_mode=GridUpdateMode.SELECTION_CHANGED,
+                            height=500,
+                            allow_unsafe_jscode=True,
+                            columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
+                            custom_css={
+                                "#gridToolBar": {
+                                    "padding-bottom": "0px !important",
+                                }
+                            }
+
+                            )
+
+        sel_row = grid_table["selected_rows"]
+        st.write(sel_row)
+
+
+
+
+        #id_nieto_input = st.text_input("Ingrese id Segmento de red")
+        #st.write(id_nieto_input)
+
+        #if st.button("Consultar API"):
+        #    if id_nieto_input:
+        #        # Realiza una solicitud a la API con el ID_N ingresado
+        #        #url_api = f'https://172.17.1.18/rest/v1/networks/{id_nieto_input}/free_addresses'
+        #        url_api = f'https://10.10.129.41/rest/v1/networks/{id_nieto_input}/free_addresses'
+        #        response = requests.get(url_api,
+        #                                verify=False,
+        #                                auth=HTTPBasicAuth('admin', 'password'))
+        #        if response.status_code == 200:
+        #            data_api = response.json()
+        #            # Muestra los datos de la API
+        #            st.write("Datos de la API para ID_N (ID_NIETO) =", id_nieto_input)
+        #            st.json(data_api)
+        #        else:
+        #            st.error("No se encontraron datos para el segmento ID_N ingresado.")
+        #    else:
+        #        st.warning("Ingresa un Segmento ID_N antes de consultar la API.")
 
     # Título de la aplicación
     st.header("2. Consolidado de Redes con Subredes")
