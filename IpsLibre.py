@@ -21,6 +21,9 @@ def main():
     df_consolidado['Size'] = df_consolidado.apply(lambda x: np.nan if len(x['Size']) > 8 else x['Size'], axis=1)
     df_consolidado['Size'] = df_consolidado['Size'].astype(float).astype('Int64')
     df_consolidado['Id_N'] = df_consolidado['Id_N'].astype('Int64')
+
+    #Ids Ipv6
+    #valores_a_excluir = [37898,37901,37904,37907]
     
     
     data_list = []
@@ -30,8 +33,8 @@ def main():
         id_n = row["Id_N"]
         nombre_n = row["Nombre_N"]
         nro_ips_totales = row["Size"]
-        # url = f"https://10.10.129.41/rest/v1/networks/{id_n}/free_addresses"
-        url = f"https://172.17.1.18/rest/v1/networks/{id_n}/free_addresses"
+        url = f"https://10.10.129.41/rest/v1/networks/{id_n}/free_addresses"
+        # url = f"https://172.17.1.18/rest/v1/networks/{id_n}/free_addresses"
         # Making a get request to All networks ID's
         response = requests.get(url,
                                 verify=False,

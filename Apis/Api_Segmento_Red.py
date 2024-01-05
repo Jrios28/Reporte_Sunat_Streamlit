@@ -16,8 +16,8 @@ from Envio_Correo import enviar_correo
 
 urllib3.disable_warnings()
 
-#url_padre = "https://10.10.129.41/rest/v1/networks?type="
-url_padre = "https://172.17.1.18/rest/v1/networks"
+url_padre = "https://10.10.129.41/rest/v1/networks"
+# url_padre = "https://172.17.1.18/rest/v1/networks"
 
 
 # 172.17.1.18
@@ -36,7 +36,7 @@ def obtener_datos_de_segmento_red():
 
     datos_segmento_red = [t["network"] for t in datos]
     filtered_data = [d for d in datos_segmento_red if d['network_location'] == '165' or d['network_location'] == '-1']
-    #filtered_data = [d for d in datos_segmento_red if d['network_location'] == '506' or d['network_location'] == '-1']
+    # filtered_data = [d for d in datos_segmento_red if d['network_location'] == '506' or d['network_location'] == '-1']
     df = pd.DataFrame(filtered_data)
     df1 = df[['network_id', 'network_name', 'network_address', 'network_location', 'network_type']]
     # Obtener los valores de la primera fila
@@ -49,12 +49,12 @@ def obtener_datos_de_segmento_red():
                               'network_name': 'NAME',
                               'network_address': 'P_ADDRESS',
                               'network_type': 'TYPE'})
-    nuevo_orden = ['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME','P_ADDRESS','network_location', 'TYPE']
+    nuevo_orden = ['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME', 'P_ADDRESS', 'network_location', 'TYPE']
     df2 = df1[nuevo_orden]
     df2 = df2.drop(0, axis=0)
 
     today = date.today()
-    df_padre = df2[['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME','P_ADDRESS','TYPE']]
+    df_padre = df2[['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME', 'P_ADDRESS', 'TYPE']]
     df_padre["DATE"] = today.strftime("%Y/%m/%d")
 
     # Crear DataFrames temporales para el nivel de hijo y nieto
@@ -65,14 +65,14 @@ def obtener_datos_de_segmento_red():
     for index, row in df_padre.iterrows():
         id_padre = row['ID_PADRE']
         # Obtener datos de nivel de hijo para el ID_PADRE actual
-        #url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
-        url_hijo = f'https://172.17.1.18/rest/v1/networks/{id_padre}/children'
+        url_hijo = f'https://10.10.129.41/rest/v1/networks/{id_padre}/children'
+        # url_hijo = f'https://172.17.1.18/rest/v1/networks/{id_padre}/children'
         response_hijo = requests.get(url_hijo,
                                      verify=False,
                                      auth=HTTPBasicAuth('admin', 'password'))
         data_hijo = response_hijo.json()
         data_hijo2 = [t["network"] for t in data_hijo if "network" in t]
-        #print(data_hijo2)
+        # print(data_hijo2)
         df_hijo_temp = pd.DataFrame({"ID_HIJO": [t["network_id"] for t in data_hijo2],
                                      "NAME_CHILD": [t["network_name"] for t in data_hijo2],
                                      "LOCATION": [t["network_location"] for t in data_hijo2],
@@ -88,8 +88,8 @@ def obtener_datos_de_segmento_red():
             id_hijo = row_hijo["ID_HIJO"]
 
             # Obtener datos del nivel de nieto para el ID_HIJO actual
-            url_nieto = f'https://172.17.1.18/rest/v1/networks/{id_hijo}/children'
-            #url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
+            # url_nieto = f'https://172.17.1.18/rest/v1/networks/{id_hijo}/children'
+            url_nieto = f'https://10.10.129.41/rest/v1/networks/{id_hijo}/children'
             response_nieto = requests.get(url_nieto,
                                           verify=False,
                                           auth=HTTPBasicAuth('admin', 'password'))
@@ -108,7 +108,6 @@ def obtener_datos_de_segmento_red():
             # df_nieto = df_nieto.append(df_nieto_temp, ignore_index=True)
             df_nieto = pd.concat([df_nieto, df_nieto_temp], ignore_index=True)
 
-
     df_hijo['LOCATION'] = df_hijo['LOCATION'].astype(int)
     df_hijo = df_hijo.rename(columns={
         "LOCATION": "ID_FK_PADRE"
@@ -120,7 +119,7 @@ def obtener_datos_de_segmento_red():
         "LOCATION": "ID_FK_HIJO"
     })
 
-    #df_consolidado = df_nieto.merge(df_hijo, left_on="ID_FK_HIJO", right_on="ID_HIJO", how="inner")
+    # df_consolidado = df_nieto.merge(df_hijo, left_on="ID_FK_HIJO", right_on="ID_HIJO", how="inner")
     df_consolidado = df_nieto.merge(df_hijo, left_on="ID_FK_HIJO", right_on="ID_HIJO", how="outer")
     # Renombra las columnas para mayor claridad
     df_consolidado = df_consolidado.rename(columns={
@@ -133,11 +132,12 @@ def obtener_datos_de_segmento_red():
         "TYPE_y": "TYPE_HIJO",
         "SIZE_y": "SIZE_HIJO",
     })
-    #df_consolidado_general = df_consolidado.merge(df_padre, left_on="ID_FK_PADRE", right_on="ID_PADRE", how="inner")
+    # df_consolidado_general = df_consolidado.merge(df_padre, left_on="ID_FK_PADRE", right_on="ID_PADRE", how="inner")
     df_consolidado_general = df_consolidado.merge(df_padre, left_on="ID_FK_PADRE", right_on="ID_PADRE", how="outer")
 
     df_consolidado_jerarquico = df_consolidado_general[
-        ['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME', 'P_ADDRESS' ,'TYPE', 'ID_HIJO', 'NAME_HIJO', 'TYPE_HIJO',
+        ['ID_SUPER_PADRE', 'SUPER_PADRE_NAME', 'ID_PADRE', 'NAME', 'P_ADDRESS', 'TYPE', 'ID_HIJO', 'NAME_HIJO',
+         'TYPE_HIJO',
          'ID_NIETO', 'NAME_NIETO', 'TYPE_NIETO', 'ADDRESS', 'SIZE_NIETO', 'DATE']]
 
     df_consolidado_jerarquico = df_consolidado_jerarquico.rename(columns={
@@ -177,7 +177,7 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
 
     ### Insert
     df_to_insert = df_nuevo.loc[~df_nuevo.key.isin(df_origen.key.tolist())]
-    #df_to_insert.to_csv("Consolidado_Segmentos_Red_SUNAT_NUEVOSv1.csv", index=False)
+    # df_to_insert.to_csv("Consolidado_Segmentos_Red_SUNAT_NUEVOSv1.csv", index=False)
     ### Update
     df_to_update = df_nuevo.loc[df_nuevo.key.isin(df_origen.key.tolist())]
     df_to_update.drop("DATE", axis=1, inplace=True, errors="ignore")
@@ -190,24 +190,28 @@ def obtener_datos_de_cdc(df_origen: pd.DataFrame, df_nuevo: pd.DataFrame) -> (pd
     today_zone = datetime.now(to_zone).strftime("%Y-%m-%d %H:%M:%S")
     df_to_delete["fecha_eliminacion"] = today_zone
 
-    if len(df_to_insert) > 0:        
-        #Creating df for new data and then put in csv
-        df_nuevos = df_to_insert[["Id_super_padre","Super_Padre_Name","Id_P","Nombre_P","P_Address","Tipo_P","Id_H","Nombre_H","Tipo_H","Id_N","Nombre_N","Tipo_N","Address","Size"]]
+    print("Cantidad de datos nuevos", len(df_to_insert))
+    print("Fecha y hora de ejecucion:", today_zone)
+    print("*" * 100)
+    if len(df_to_insert) > 0:
+        # Creating df for new data and then put in csv
+        df_nuevos = df_to_insert[
+            ["Id_super_padre", "Super_Padre_Name", "Id_P", "Nombre_P", "P_Address", "Tipo_P", "Id_H", "Nombre_H",
+             "Tipo_H", "Id_N", "Nombre_N", "Tipo_N", "Address", "Size"]]
         df_nuevos["fecha_nuevo"] = today_zone
         df_nuevos.to_csv("Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv", index=False)
-        
+
         today = date.today()
         fecha_actual = today.strftime("%Y/%m/%d")
-        
-        destinatario = ['wmayorga@sunat.gob.pe','jbarbadillo@sunat.gob.pe','cposadas@sunat.gob.pe','fsandoval@electrodata.com.pe','jrios@electrodata.com.pe','ftafur@electrodata.com.pe']
+        # destinatario = ['jrios@electrodata.com.pe','ftafur@electrodata.com.pe']
+        destinatario = ['wmayorga@sunat.gob.pe', 'jbarbadillo@sunat.gob.pe', 'cposadas@sunat.gob.pe',
+                        'fsandoval@electrodata.com.pe', 'jrios@electrodata.com.pe', 'ftafur@electrodata.com.pe']
         asunto = 'Reporte Segmentos Nuevos'
         mensaje = f'Hola, Se ha generado el reporte de Segmentos Nuevos a la fecha de {fecha_actual}.'
         adjunto_path = '/home/pc_report/Reporte_Sunat_Streamlit/Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv'
-
-        enviar_correo(destinatario, asunto, mensaje, adjunto_path)    
+        enviar_correo(destinatario, asunto, mensaje, adjunto_path)
     else:
-        "El df_to_insert esta vacío"    
-
+        "El df_to_insert esta vacío"
 
     try:
         df_origen_eliminados = pd.read_csv("Consolidado_Segmentos_Red_SUNAT_ELIMINADOS.csv", sep=',')
