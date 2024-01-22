@@ -1,1 +1,3 @@
 Id_super_padre,Super_Padre_Name,Id_P,Nombre_P,P_Address,Tipo_P,Id_H,Nombre_H,Tipo_H,Id_N,Nombre_N,Tipo_N,Address,Size,fecha_nuevo
+165,SUNAT,43055,Sunat DC_01,,supernet,43056.0,Sunat DC_01-Redes,supernet,46513.0,TEST_NET_05_01,lan,10.10.190.0/24,256,2024-01-05 20:43:19
+165,SUNAT,43055,Sunat DC_01,,supernet,43056.0,Sunat DC_01-Redes,supernet,46516.0,TEST_NET_01_05_2,lan,10.10.191.0/24,256,2024-01-05 20:43:19

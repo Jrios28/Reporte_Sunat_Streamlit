@@ -131,12 +131,12 @@ async def main():
 
             # aqui muestro el padre
             if id_p not in node_mapping:
-                add_node_with_spacing(id_p, id_sp, row["Nombre_P"] + "/  ID: " + str(row["Id_P"]), spacing=2)
-                node_mapping[id_p] = row["Nombre_P"]
+                add_node_with_spacing(id_p, id_sp, str(row["Nombre_P"]) + "/  ID: " + str(row["Id_P"]), spacing=2)
+                node_mapping[id_p] = str(row["Nombre_P"])
             # aqui muestro el hijo
             if id_h not in node_mapping:
-                add_node_with_spacing(id_h, id_p, row["Nombre_H"] + "/  ID: " + str(row["Id_H"]), spacing=4)
-                node_mapping[id_h] = row["Nombre_H"]
+                add_node_with_spacing(id_h, id_p, str(row["Nombre_H"]) + "/  ID: " + str(row["Id_H"]), spacing=4)
+                node_mapping[id_h] = str(row["Nombre_H"])
             # aqui muestro el nieto
             if id_n not in node_mapping:
                 add_node_with_spacing(id_n, id_h, nombre_n, spacing=6)
@@ -157,7 +157,8 @@ async def main():
 
         # ===================================Consulta Segmentos Libres================================
         st.subheader("Consulta Porcentaje IP's libres por segmento")
-        file_path = "/home/pc_report/Reporte_Sunat_Streamlit/ConsumoIPsLibre.xlsx"
+        #file_path = "/home/pc_report/Reporte_Sunat_Streamlit/ConsumoIPsLibre.xlsx"
+        file_path = "D:/Electrodata/11.SUNAT/SunatAPI/ConsumoIPsLibre.xlsx"
         df_IpLibre = pd.read_excel(file_path)
 
         # Mostrar el DataFrame resultante
@@ -235,7 +236,8 @@ async def main():
     with st.expander("Ver"):
 
         st.subheader("Segmentos Nuevos")
-        file_path_segmento = "/home/pc_report/Reporte_Sunat_Streamlit/Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv"
+        #file_path_segmento = "/home/pc_report/Reporte_Sunat_Streamlit/Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv"
+        file_path_segmento = "D:/Electrodata/11.SUNAT/SunatAPI/Consolidado_Segmentos_Red_SUNAT_NUEVOS.csv"
         df_Segmento = pd.read_csv(file_path_segmento)
 
         df_SegmentoNuevo = df_Segmento[['Id_N', 'Nombre_N', 'Tipo_N', 'Address', 'Size', 'fecha_nuevo']]
@@ -311,11 +313,12 @@ async def main():
 
                         # =================================Grafico Barra tipos de red================================
 
-    st.header("3. Reportes de Ips Usadas")
+    st.header("3. Reportes de Ips Nuevas Usadas")
     with st.expander("Ver"):
 
         st.subheader("Ips Usadas")
-        file_path_usado = "/home/pc_report/Reporte_Sunat_Streamlit/ConsumoIPsUsado.xlsx"
+        #file_path_usado = "/home/pc_report/Reporte_Sunat_Streamlit/ConsumoIPsUsado.xlsx"
+        file_path_usado = "D:/Electrodata/11.SUNAT/SunatAPI/IpsNuevasUsadas.xlsx"
         df_IpUsado = pd.read_excel(file_path_usado)
 
         fecha_actual = datetime.now()
@@ -323,20 +326,19 @@ async def main():
         maxdate = fecha_actual
 
         # Filtrar
-        fecha_inicio_ip = st.date_input("Fecha de Inicio", value=mindate)
-        fecha_fin_ip = st.date_input("Fecha de Fin", max_value=maxdate)
+        #fecha_inicio_ip = st.date_input("Fecha de Inicio", value=mindate)
+        #fecha_fin_ip = st.date_input("Fecha de Fin", max_value=maxdate)
 
         direcciones_unicas = df_IpUsado['ADDRESS'].unique()
 
         direccion_ip = st.selectbox('Seleccione la Direccion IP', direcciones_unicas)
 
-        df_filtrado = df_IpUsado[(df_IpUsado['FECHA'] >= fecha_inicio_ip.strftime('%Y/%m/%d')) & (
-                    df_IpUsado['FECHA'] <= fecha_fin_ip.strftime('%Y/%m/%d'))]
+        #df_filtrado = df_IpUsado[(df_IpUsado['FECHA'] >= fecha_inicio_ip.strftime('%Y/%m/%d')) & (df_IpUsado['FECHA'] <= fecha_fin_ip.strftime('%Y/%m/%d'))]
 
         if direccion_ip:
-            df_filtrado = df_filtrado[df_filtrado['ADDRESS'] == direccion_ip]
+            df_filtrado = df_IpUsado[df_IpUsado['ADDRESS'] == direccion_ip]
 
-        st.write(df_filtrado[['ADDRESS', 'IPS_USADAS', 'NRO_IPS_USADAS']])
+        st.write(df_filtrado[['ADDRESS', 'NOMBRE', 'Nuevas_IPS']])
 
         show_expander = st.checkbox("Enviar Correo Ips Usadas")
 
@@ -377,8 +379,10 @@ async def main():
         # dfConsolidado['DATE'] = pd.to_datetime(dfConsolidado['DATE'],format='%d/%m/%Y')
 
         # Filtrar el DataFrame según el rango de fechas seleccionado
-        filtered_df = dfConsolidado[(dfConsolidado['DATE'] >= start_date.strftime('%Y/%m/%d')) & (
-                    dfConsolidado['DATE'] <= end_date.strftime('%Y/%m/%d'))]
+        #linux
+        #filtered_df = dfConsolidado[(dfConsolidado['DATE'] >= start_date.strftime('%Y/%m/%d')) & (dfConsolidado['DATE'] <= end_date.strftime('%Y/%m/%d'))]
+        #windows
+        filtered_df = dfConsolidado[(dfConsolidado['DATE'] >= start_date.strftime('%d/%m/%Y')) & (dfConsolidado['DATE'] <= end_date.strftime('%d/%m/%Y'))]
 
         # Mostrar los datos filtrados
         st.subheader('Información filtrada:')

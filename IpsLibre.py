@@ -93,12 +93,12 @@ def main():
         
     #Envio de correo
 
-    destinatario = ['wmayorga@sunat.gob.pe','jbarbadillo@sunat.gob.pe','cposadas@sunat.gob.pe','fsandoval@electrodata.com.pe','jrios@electrodata.com.pe','ftafur@electrodata.com.pe']
-    asunto = 'Reporte IPs Libres'
-    mensaje = f'Hola, Se ha generado el reporte de IPs Libres respecto a la fecha de {fecha_actual}.'
-    adjunto_path = '/home/pc_report/Reporte_Sunat_Streamlit/ConsumoIPsLibre.xlsx'
+    #destinatario = ['wmayorga@sunat.gob.pe','jbarbadillo@sunat.gob.pe','cposadas@sunat.gob.pe','fsandoval@electrodata.com.pe','jrios@electrodata.com.pe','ftafur@electrodata.com.pe']
+    #asunto = 'Reporte IPs Libres'
+    #mensaje = f'Hola, Se ha generado el reporte de IPs Libres respecto a la fecha de {fecha_actual}.'
+    #adjunto_path = '/home/pc_report/Reporte_Sunat_Streamlit/ConsumoIPsLibre.xlsx'
 
-    enviar_correo(destinatario, asunto, mensaje, adjunto_path)
+    #enviar_correo(destinatario, asunto, mensaje, adjunto_path)
 
 
 if __name__ == '__main__':

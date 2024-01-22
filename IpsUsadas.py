@@ -38,8 +38,8 @@ def main():
         nro_ips_totales = row["Size"]
         nro_ips_libres = 0
 
-        # url = f"https://10.10.129.41/rest/v1/networks/{id_n}/free_addresses"
-        url = f"https://172.17.1.18/rest/v1/networks/{id_n}/free_addresses?limit=-1"
+        url = f"https://10.10.129.41/rest/v1/networks/{id_n}/free_addresses?limit=-1"
+        # url = f"https://172.17.1.18/rest/v1/networks/{id_n}/free_addresses?limit=-1"
         # Making a get request to All networks ID's
         response = requests.get(url,
                                 verify=False,
@@ -79,7 +79,7 @@ def main():
 
     if not os.path.exists(nombre_archivo_excel):
 
-        with pd.ExcelWriter(nombre_archivo_excel, engine='openpyxl', mode='w', if_sheet_exists='replace') as writer:
+        with pd.ExcelWriter(nombre_archivo_excel, engine='openpyxl', mode='w') as writer:
             df_IpUsado.to_excel(writer, index=False)
 
     else:
